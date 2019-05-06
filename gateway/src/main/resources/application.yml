@@ -21,3 +21,6 @@ eureka:
 #Necessario para que os authorization nao sejam removidos
 zuul:
   sensitive-headers: Cookie
+jwt:
+  config:
+    login-url: /auth/login

@@ -2,48 +2,42 @@ package com.mahhaus.acertus.auth.security.config;
 
 import com.mahhaus.acertus.auth.security.filter.JwtUsernamePasswordAuthenticationFilter;
 import com.mahhaus.acertus.core.property.JwtConfiguration;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mahhaus.acertus.security.config.SecurityTokenConfig;
+import com.mahhaus.acertus.security.filter.JwtTokenAuthorizationFilter;
+import com.mahhaus.acertus.security.token.converter.TokenConverter;
+import com.mahhaus.acertus.security.token.creator.TokenCreator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-
-import javax.servlet.http.HttpServletResponse;
-
-import static org.springframework.security.config.http.SessionCreationPolicy.*;
 
 /**
  * @author josias on 05/05/19
  */
 @EnableWebSecurity
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class SecurityCredentialsConfig extends WebSecurityConfigurerAdapter {
+public class SecurityCredentialsConfig extends SecurityTokenConfig {
     private final UserDetailsService userDetailsService;
-    private final JwtConfiguration jwtConfiguration;
+    private final TokenCreator tokenCreator;
+    private final TokenConverter tokenConverter;
+
+    public SecurityCredentialsConfig(JwtConfiguration jwtConfiguration,
+                                     @Qualifier("userDetailsServiceImpl") UserDetailsService userDetailsService,
+                                     TokenCreator tokenCreator, TokenConverter tokenConverter) {
+        super(jwtConfiguration);
+        this.userDetailsService = userDetailsService;
+        this.tokenCreator = tokenCreator;
+        this.tokenConverter = tokenConverter;
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
-                .and()
-                .sessionManagement().sessionCreationPolicy(STATELESS)
-                .and()
-                .exceptionHandling().authenticationEntryPoint((req, resp, e) -> resp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                .and()
-                .addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfiguration))
-                .authorizeRequests()
-                .antMatchers(jwtConfiguration.getLoginUrl()).permitAll()
-                .antMatchers("/course/admin/**").hasRole("ADMIN")
-                .anyRequest()
-                .authenticated();
+                .addFilter(new JwtUsernamePasswordAuthenticationFilter(authenticationManager(), jwtConfiguration, tokenCreator))
+                .addFilterAfter( new JwtTokenAuthorizationFilter(jwtConfiguration, tokenConverter), UsernamePasswordAuthenticationFilter.class);
         super.configure(http);
     }
 
