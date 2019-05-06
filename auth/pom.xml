@@ -17,6 +17,7 @@
 
     <properties>
         <java.version>11</java.version>
+        <acertus-core.version>1.0-SNAPSHOT</acertus-core.version>
     </properties>
 
     <dependencies>
@@ -29,6 +30,12 @@
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mahhaus.acertus</groupId>
+            <artifactId>core</artifactId>
+            <version>${acertus-core.version}</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 
