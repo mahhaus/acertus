@@ -1,9 +1,20 @@
-server:
-  port: 8080
+#COURSE
 
+server:
+  port: 8082
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8081/eureka/
+    #Para Saber os microservices
+    fetch-registry: true
+    register-with-eureka: true
 spring:
   application:
-    name: acertus
+    name: course
   jpa:
     show-sql: false
     hibernate:
