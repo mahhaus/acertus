@@ -26,3 +26,7 @@ spring:
     url: jdbc:mysql://localhost:3306/acertus?allowPublicKeyRetrieval=true&sslMode=DISABLED
     username: root
     password: luiza.2014
+
+jwt:
+  config:
+    type: signed

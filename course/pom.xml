@@ -17,14 +17,20 @@
 
     <properties>
         <java.version>11</java.version>
+        <acertus-core.version>1.0-SNAPSHOT</acertus-core.version>
+        <acertus-token.version>1.0-SNAPSHOT</acertus-token.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.mahhaus.acertus</groupId>
             <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>${acertus-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.mahhaus.acertus</groupId>
+            <artifactId>token</artifactId>
+            <version>${acertus-token.version}</version>
         </dependency>
     </dependencies>
 
