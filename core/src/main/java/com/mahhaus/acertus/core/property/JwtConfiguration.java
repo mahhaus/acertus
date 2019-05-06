@@ -13,13 +13,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "jwt.config")
 @Getter
+@Setter
 @ToString
 public class JwtConfiguration {
     private String loginUrl = "/login/**";
 
     @NestedConfigurationProperty
     private Header header = new Header();
-    private int expiration = 36000;
+    private int expiration = 3600;
     private String privateKey = "TaqtEUaKCOU6PabYYg2NLjBxcYvrDrpU";
     private String type = "encrypted";
 

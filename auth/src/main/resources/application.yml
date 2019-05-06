@@ -1,7 +1,7 @@
-#COURSE
+#AUTH
 
 server:
-  port: 8082
+  port: 8083
 
 eureka:
   instance:
@@ -14,7 +14,7 @@ eureka:
     register-with-eureka: true
 spring:
   application:
-    name: course
+    name: auth
   jpa:
     show-sql: false
     hibernate:
