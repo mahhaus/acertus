@@ -1,0 +1,3 @@
+$2a$10$KgVXzziQS.9wWZGHArzrPODg5gYeOb0U60ALn0dzPc2mxQLRRPK5y
+
+System.out.println(new BCryptPasswordEncoder().encode("luiza.2014"));
